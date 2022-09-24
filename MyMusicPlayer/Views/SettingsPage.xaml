@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:MyMusicPlayer.ViewModels"
+             x:Class="MyMusicPlayer.Views.SettingsPage"
+             Title="SettingsPage">
+    
+    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Start" Margin="10">
+        <Entry
+            Placeholder="Please enter song folder path"
+            Text="{Binding SongFolderPath, Mode=TwoWay}"
+            Margin="5,10,10,10"
+            WidthRequest="400"
+            />
+
+        <Button
+            Margin="0,5,5,5"
+            Text="Browse"
+            Command="{Binding BrowseFolderCommand}"
+            HeightRequest="35"
+            />
+        </HorizontalStackLayout>
+</ContentPage>
