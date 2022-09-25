@@ -2,22 +2,93 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:MyMusicPlayer.ViewModels"
+             xmlns:models="clr-namespace:MyMusicPlayer.Models"
+             x:DataType="viewModels:SettingsViewModel"
              x:Class="MyMusicPlayer.Views.SettingsPage"
              Title="SettingsPage">
-    
-    <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Start" Margin="10">
-        <Entry
-            Placeholder="Please enter song folder path"
-            Text="{Binding SongFolderPath, Mode=TwoWay}"
-            Margin="5,10,10,10"
-            WidthRequest="400"
-            />
+    <Grid>
 
-        <Button
-            Margin="0,5,5,5"
-            Text="Browse"
-            Command="{Binding BrowseFolderCommand}"
-            HeightRequest="35"
-            />
-        </HorizontalStackLayout>
+        <Grid.ColumnDefinitions>
+             <ColumnDefinition Width="500"/>
+             <ColumnDefinition Width="100"/>
+             <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <VerticalStackLayout Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Start" Margin="50,100,15,10">
+                <Entry
+                    Placeholder="Please enter song folder path"
+                    PlaceholderColor="DimGray"
+                    TextColor="Black"
+                    Text="{Binding SongFolderPath}"
+                    Margin="0,0,10,0"
+                    WidthRequest="400"
+                    MaximumHeightRequest="35"
+                    BackgroundColor="LightGray"
+                />
+
+                <Button
+                    Margin="0,5,5,5"
+                    Text="Browse"
+                    Command="{Binding BrowseFolderCommand}"
+                    HeightRequest="35"
+                    WidthRequest="85"
+                    />
+           
+            </HorizontalStackLayout>
+            <Entry
+                Placeholder="Enter Description of the songs"
+                PlaceholderColor="DimGray"
+                TextColor="Black"
+                VerticalTextAlignment="Start"
+                WidthRequest="500"
+                HeightRequest="300"
+                BackgroundColor="LightGray"
+                Text="{Binding SongFolderDescription}"
+                />
+
+            <Button
+                Margin ="0,5,5,5"
+                Text="Add Folder"
+                Command="{Binding AddSongsFolderCommand}"
+                HeightRequest="35"
+                WidthRequest="150"
+                BackgroundColor="FloralWhite"
+                />   
+        </VerticalStackLayout>
+
+            <CollectionView ItemsSource="{Binding FoldersList}" Grid.Column="2"
+                            Grid.RowSpan="2"
+                        Margin="100,100,0,0"
+                        VerticalOptions="StartAndExpand" HorizontalOptions="Center"
+                        MaximumHeightRequest="500" BackgroundColor="Black"
+                        ItemsLayout="VerticalList"
+                        >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem
+                                    BackgroundColor="DarkRed"
+                                    Text="Delete"
+                                    Command="{Binding RemoveFolderFromList}"
+                                    />
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <VerticalStackLayout x:DataType="models:SongsFolder">
+                            <Label Text="{Binding Name}" TextColor="LightGray" FontAttributes="Bold" FontFamily="Halvetica"/>
+                            <Label Text="{Binding Description}" FontAttributes="Italic" FontFamily="Halvetica"/>
+                            <Line BackgroundColor="AntiqueWhite" Margin="0,0,5,5"/> 
+                        </VerticalStackLayout>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+     </Grid>
 </ContentPage>

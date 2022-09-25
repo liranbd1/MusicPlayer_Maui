@@ -22,7 +22,7 @@ public static class MauiProgram
 #elif __MACCATALYST__
 		builder.Services.AddTransient<IFolderPicker, Platforms.MacCatalyst.FolderPicker>();
 #endif
-
+		
 		builder.Services.AddTransient<SettingsPage>();
         return builder.Build();
 
