@@ -6,6 +6,7 @@
              x:DataType="viewModels:SettingsViewModel"
              x:Class="MyMusicPlayer.Views.SettingsPage"
              Title="SettingsPage">
+    
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -50,42 +51,45 @@
                 BackgroundColor="LightGray"
                 Text="{Binding SongFolderDescription}"
                 />
-
-            <Button
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Button
                 Margin ="0,5,5,5"
                 Text="Add Folder"
                 Command="{Binding AddSongsFolderCommand}"
                 HeightRequest="35"
                 WidthRequest="150"
                 BackgroundColor="FloralWhite"
-                />   
+                />
+                
+                <Button Margin ="0,5,5,5"
+                Text="Remove Selected Folder"
+                Command="{Binding RemoveFolderFromListCommand}"
+                HeightRequest="35"
+                WidthRequest="200"
+                BackgroundColor="FloralWhite"/>
+            </HorizontalStackLayout>
+            
         </VerticalStackLayout>
+            
 
-            <CollectionView ItemsSource="{Binding FoldersList}" Grid.Column="2"
-                            Grid.RowSpan="2"
+        <CollectionView ItemsSource="{Binding FoldersList}" Grid.Column="2"
+                        Grid.RowSpan="2"
                         Margin="100,100,0,0"
                         VerticalOptions="StartAndExpand" HorizontalOptions="Center"
                         MaximumHeightRequest="500" BackgroundColor="Black"
                         ItemsLayout="VerticalList"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedSongsFolder}"
+                        SelectionChangedCommand="{Binding SelectedFolderChangeCommand}"
+                        
                         >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <SwipeView>
-                        <SwipeView.LeftItems>
-                            <SwipeItems>
-                                <SwipeItem
-                                    BackgroundColor="DarkRed"
-                                    Text="Delete"
-                                    Command="{Binding RemoveFolderFromList}"
-                                    />
-                            </SwipeItems>
-                        </SwipeView.LeftItems>
-                        <VerticalStackLayout x:DataType="models:SongsFolder">
+                    <VerticalStackLayout x:DataType="models:SongsFolder">
                             <Label Text="{Binding Name}" TextColor="LightGray" FontAttributes="Bold" FontFamily="Halvetica"/>
                             <Label Text="{Binding Description}" FontAttributes="Italic" FontFamily="Halvetica"/>
-                            <Line BackgroundColor="AntiqueWhite" Margin="0,0,5,5"/> 
+                            <Line BackgroundColor="AntiqueWhite" Margin="0,0,5,5"/>
                         </VerticalStackLayout>
-                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

@@ -12,40 +12,51 @@ namespace MyMusicPlayer.ViewModels
     {
         private string _songFolderPath;
         private string _songFolerDescription;
+        private SongsFolder _selectedSongsFolder;
         private readonly IFolderPicker _folderPicker;
         private readonly FolderListJson _folderListJsonObj;
-        private readonly string _folderListJsonPath;
 
         public ICommand BrowseFolderCommand { get; private set; }
         public ICommand AddSongsFolderCommand { get; private set; }
-        public ICommand RemoveFolderFromList { get; private set; }
+        public ICommand RemoveFolderFromListCommand { get; private set; }
+        public ICommand SelectedFolderChangeCommand { get; private set; }
 
-        public SettingsViewModel(IFolderPicker folderPicker)
+        public SettingsViewModel(IFolderPicker folderPicker, FolderListJson folderList)
         {
-            _folderListJsonPath = Path.Combine(FileSystem.Current.AppDataDirectory, "FolderSongs.json");
-            if (!File.Exists(_folderListJsonPath))
-            {
-                _folderListJsonObj = new FolderListJson();
-                _folderListJsonObj.FoldersList = new ObservableCollection<SongsFolder>();
-                File.WriteAllText(_folderListJsonPath, JsonConvert.SerializeObject(_folderListJsonObj));
-            }
-            else
-            {
-                var reader = new StreamReader(_folderListJsonPath);
-                var jsonValue = reader.ReadToEnd();
-                _folderListJsonObj = JsonConvert.DeserializeObject<FolderListJson>(jsonValue);
-            }
-
+            _folderListJsonObj = folderList;
+            _folderPicker = folderPicker;
             BrowseFolderCommand = new Command(() => OnBrowseButtonClicked());
             AddSongsFolderCommand = new Command(() => OnAddFolderButtonClicked());
-            RemoveFolderFromList = new Command(() =>  OnFolderDelete(""));//key => OnFolderDelete(key));
-            ((Command)AddSongsFolderCommand).ChangeCanExecute();
-            _folderPicker = folderPicker;
-
+            SelectedFolderChangeCommand = new Command(() => OnFolderSelectedChange());
+            RemoveFolderFromListCommand = new Command(() =>  OnFolderDelete());//key => OnFolderDelete(key));
         }
 
+        private void OnFolderSelectedChange()
+        {
+            SongFolderPath = SelectedSongsFolder.Name;
+        }
+
+        public SongsFolder SelectedSongsFolder
+        {
+            get => _selectedSongsFolder;
+            set
+            {
+                if(_selectedSongsFolder != value)
+                {
+                    _selectedSongsFolder = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// List of folders saved in the app directory
+        /// </summary>
         public ObservableCollection<SongsFolder> FoldersList => _folderListJsonObj.FoldersList;
 
+        /// <summary>
+        /// User Input - Song Description
+        /// </summary>
         public string SongFolderDescription
         {
             get => _songFolerDescription;
@@ -59,6 +70,9 @@ namespace MyMusicPlayer.ViewModels
             }
         }
 
+        /// <summary>
+        /// User input - Song Path
+        /// </summary>
         public string SongFolderPath
         {
             get => _songFolderPath;
@@ -73,12 +87,26 @@ namespace MyMusicPlayer.ViewModels
             }
         }
 
-
-        private void OnFolderDelete(object folderToRemove)
+        /// <summary>
+        /// Removing folder from Json
+        /// </summary>
+        
+        private async void OnFolderDelete()
         {
-            SongFolderPath = "Deleted";//folderToRemove.ToString();
+            if (FoldersList.Contains(SelectedSongsFolder))
+            {
+                _folderListJsonObj.UpdateFolderList(SelectedSongsFolder, false);
+            }
+
+            await Shell.Current.DisplayAlert("Removed!", "Folder successfuly removed", "OK");
+            OnPropertyChanged(nameof(FoldersList));
+            SongFolderDescription = "";
+            SongFolderPath = "";
         }
 
+        /// <summary>
+        /// Handle Add button click and add the folder to the json
+        /// </summary>
         private async void OnAddFolderButtonClicked()
         {
             var newFolder = new SongsFolder()
@@ -86,16 +114,26 @@ namespace MyMusicPlayer.ViewModels
                 Name = SongFolderPath,
                 Description = SongFolderDescription
             };
-            
-            FoldersList.Add(newFolder);
-            File.WriteAllText(_folderListJsonPath, JsonConvert.SerializeObject(_folderListJsonObj));
 
+            if (FoldersList.Contains(newFolder))
+            {
+                await Shell.Current.DisplayAlert("Folder Exists",
+                    "The music player already sync with this folder",
+                    "OK");
+
+                return;
+            }
+
+            _folderListJsonObj.UpdateFolderList(newFolder);
             await Shell.Current.DisplayAlert("Added!", "Music files will now sync from this folder", "OK");
             OnPropertyChanged(nameof(FoldersList));
             SongFolderDescription = "";
             SongFolderPath = "";
         }
 
+        /// <summary>
+        /// Open Folder picker
+        /// </summary>
         private async void OnBrowseButtonClicked()
         {
             var pickedFolder = await _folderPicker.PickFolder();

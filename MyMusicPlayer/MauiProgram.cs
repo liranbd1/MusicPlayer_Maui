@@ -1,4 +1,5 @@
 ﻿using MyMusicPlayer.Models;
+using MyMusicPlayer.ViewModels;
 using MyMusicPlayer.Views;
 
 namespace MyMusicPlayer;
@@ -16,15 +17,19 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
+
+        // Dependecy Injection for the correct IFolderPicker implemintation depending on OS
+		// Making sure that the FolderPicker is a singleton object.
 #if Windows
-		builder.Services.AddTransient<IFolderPicker, Platforms.Windows.FolderPicker>();
+		builder.Services.AddSingleton<IFolderPicker, Platforms.Windows.FolderPicker>();
 		
 #elif __MACCATALYST__
-		builder.Services.AddTransient<IFolderPicker, Platforms.MacCatalyst.FolderPicker>();
+		builder.Services.AddSingleton<IFolderPicker, Platforms.MacCatalyst.FolderPicker>();
 #endif
-		
-		builder.Services.AddTransient<SettingsPage>();
-        return builder.Build();
+        builder.Services.AddSingleton<FolderListJson>();
+        builder.Services.AddSingleton<SettingsPage>();
+		builder.Services.AddSingleton<SettingsViewModel>();
+		return builder.Build();
 
     }
 }
