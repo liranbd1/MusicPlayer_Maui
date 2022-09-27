@@ -6,20 +6,22 @@
     xmlns:views="clr-namespace:MyMusicPlayer.Views"
     Shell.FlyoutBehavior="Disabled"
     Shell.TabBarIsVisible="True"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    x:Name="shell"
+    >
+
+    
     <TabBar>
-        <Tab Title="Home">
-            <ShellContent
-                 
-                 ContentTemplate="{DataTemplate views:MainPage}"
-            />
+        <Tab Title="Home"> 
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}"/>
+        </Tab>
+        <Tab Title="Media Player" x:Name="StartUpPage">
+            <ShellContent ContentTemplate="{DataTemplate views:MediaPlayerPage}"/>
         </Tab>
         <Tab Title="Settings">
-            <ShellContent
-                
-                ContentTemplate="{DataTemplate views:SettingsPage}"
-                />
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}"/>
         </Tab>
+        
     </TabBar>
    
 
