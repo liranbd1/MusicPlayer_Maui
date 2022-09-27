@@ -8,6 +8,9 @@ namespace MyMusicPlayer.Models
 {
 	public class FolderListJson
 	{
+        public event EventHandler<string> NewFolderAddedEvent;
+        public event EventHandler<string> FolderRemovedEvent;
+
         class InnerFolderList
         {
             public ObservableCollection<SongsFolder> FoldersList { get; set; }
@@ -37,18 +40,20 @@ namespace MyMusicPlayer.Models
             File.WriteAllText(_appDirectroyPath, JsonConvert.SerializeObject(_innerFoldersList));
         }
 
-        private void AddFolder(SongsFolder folder)
+        protected virtual void OnNewFolderAdded(string e)
         {
-            FoldersList.Add(folder);
+            EventHandler<string> handler = NewFolderAddedEvent;
+            handler?.Invoke(this, e);
         }
 
-        private void RemoveFolder(SongsFolder folder)
+        protected virtual void OnFolderRemoved(string e)
         {
-            FoldersList.Remove(folder);
+            EventHandler<string> handler = FolderRemovedEvent;
+            handler?.Invoke(this, e);
         }
 
-		private void InitializeFolderList()
-		{
+        private void InitializeFolderList()
+        {
             if (File.Exists(_appDirectroyPath))
             {
                 var jsonString = ReadFolderSongsJson(_appDirectroyPath);
@@ -62,10 +67,21 @@ namespace MyMusicPlayer.Models
             }
         }
 
-		private string ReadFolderSongsJson(string path)
-		{
+        private string ReadFolderSongsJson(string path)
+        {
             var reader = new StreamReader(_appDirectroyPath);
             return reader.ReadToEnd();
+        }
+
+        private void AddFolder(SongsFolder folder)
+        {
+            FoldersList.Add(folder);
+            OnNewFolderAdded(folder.Name);
+        }
+
+        private void RemoveFolder(SongsFolder folder)
+        {
+            FoldersList.Remove(folder);
         }
 	}
 }

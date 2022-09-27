@@ -29,6 +29,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<FolderListJson>();
         builder.Services.AddSingleton<SettingsPage>();
 		builder.Services.AddSingleton<SettingsViewModel>();
+		builder.Services.AddSingleton<SongsListHandler>();
+		builder.Services.AddSingleton<MediaPlayerPage>();
 		return builder.Build();
 
     }

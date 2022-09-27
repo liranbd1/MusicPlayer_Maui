@@ -11,7 +11,7 @@
     >
 
     
-    <TabBar>
+    <TabBar CurrentItem="{x:Reference StartUpPage}">
         <Tab Title="Home"> 
             <ShellContent ContentTemplate="{DataTemplate views:MainPage}"/>
         </Tab>

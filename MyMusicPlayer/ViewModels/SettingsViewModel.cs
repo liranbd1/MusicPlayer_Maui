@@ -28,7 +28,7 @@ namespace MyMusicPlayer.ViewModels
             BrowseFolderCommand = new Command(() => OnBrowseButtonClicked());
             AddSongsFolderCommand = new Command(() => OnAddFolderButtonClicked());
             SelectedFolderChangeCommand = new Command(() => OnFolderSelectedChange());
-            RemoveFolderFromListCommand = new Command(() =>  OnFolderDelete());//key => OnFolderDelete(key));
+            RemoveFolderFromListCommand = new Command(() =>  OnFolderDelete());
         }
 
         private void OnFolderSelectedChange()
@@ -111,7 +111,7 @@ namespace MyMusicPlayer.ViewModels
         {
             var newFolder = new SongsFolder()
             {
-                Name = SongFolderPath,
+                Name = CleanFolderPath(SongFolderPath),
                 Description = SongFolderDescription
             };
 
@@ -129,6 +129,14 @@ namespace MyMusicPlayer.ViewModels
             OnPropertyChanged(nameof(FoldersList));
             SongFolderDescription = "";
             SongFolderPath = "";
+        }
+
+        private static string CleanFolderPath(string path)
+        {
+            string res;
+
+            res = path.Split(@"file://")[1];
+            return res;
         }
 
         /// <summary>
