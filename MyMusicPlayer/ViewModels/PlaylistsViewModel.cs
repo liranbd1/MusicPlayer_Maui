@@ -6,21 +6,21 @@ using MyMusicPlayer.Models;
 
 namespace MyMusicPlayer.ViewModels
 {
-	public class MediaPlayerViewModel : INotifyPropertyChanged
-	{
-		private SongsListHandler _songsListHandler;
+    public class PlaylistsViewModel : INotifyPropertyChanged
+    {
+        private SongsListHandler _songsListHandler;
 
-		public MediaPlayerViewModel(SongsListHandler songsListHandler)
-		{
-			_songsListHandler = songsListHandler;
+        public PlaylistsViewModel(SongsListHandler songsListHandler)
+        {
+            _songsListHandler = songsListHandler;
             OnPropertyChanged(nameof(SongsList));
 
             _songsListHandler.SongsListChanged += OnSongsListChanged;
-		}
+        }
 
         private void OnSongsListChanged(object sender, EventArgs e)
         {
-			OnPropertyChanged(nameof(SongsList));
+            OnPropertyChanged(nameof(SongsList));
         }
 
         public ObservableCollection<SongFile> SongsList => _songsListHandler.AllSongs;

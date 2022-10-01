@@ -28,11 +28,6 @@ namespace MyMusicPlayer.Models
 
 		public ObservableCollection<SongFile> AllSongs { get; private set; }
 
-		//protected virtual void OnSongsListChanged()
-		//{
-		//	EventHandler handler = SongsListChanged;
-		//	handler?.Invoke(this, new EventArgs());
-		//}
 
 		private async void InitializeSongsList(IList<SongsFolder> songsFolders)
 		{
@@ -78,6 +73,11 @@ namespace MyMusicPlayer.Models
 #endif
 			string fileNameWithType = filePath.Split(slash).Last<string>();
 			string fileName = fileNameWithType.Split(".")[0];
+			if (fileName == null)
+			{
+				fileName = "SomeEmptyShit";
+			}
+
 			return fileName;
 		}
 

@@ -67,6 +67,6 @@
         </Grid>
 
         <!--Playlist selection-->
-        <Picker Grid.Column="1" Title="Select a song" ItemsSource="{Binding SongsList}" ItemDisplayBinding="{Binding Name}"/>
+       
     </Grid>
 </ContentPage>

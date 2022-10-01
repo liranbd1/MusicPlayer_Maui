@@ -12,8 +12,8 @@
 
     
     <TabBar CurrentItem="{x:Reference StartUpPage}">
-        <Tab Title="Home"> 
-            <ShellContent ContentTemplate="{DataTemplate views:MainPage}"/>
+        <Tab Title="Playlists"> 
+            <ShellContent ContentTemplate="{DataTemplate views:PlaylistsPage}"/>
         </Tab>
         <Tab Title="Media Player" x:Name="StartUpPage">
             <ShellContent ContentTemplate="{DataTemplate views:MediaPlayerPage}"/>

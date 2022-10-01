@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyMusicPlayer.Views.PlaylistsPage"
+             xmlns:viewModels="clr-namespace:MyMusicPlayer.ViewModels"
+             xmlns:models="clr-namespace:MyMusicPlayer.Models"
+             x:DataType="viewModels:PlaylistsViewModel"
+             Title="PlaylistsPage">
+    <Grid Padding="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+         <!--<Picker Grid.Column="1" Title="Select a song" ItemsSource="{Binding SongsList}" ItemDisplayBinding="{Binding Name}"/>-->
+        <Label
+            Grid.Column="0"
+            Grid.Row="0"
+            Text="Songs list"
+            FontSize="Header"
+            FontFamily="Halvetica"
+            FontAttributes="Italic, Bold"
+            />
+        <CollectionView ItemsSource="{Binding SongsList}"
+                        Background="DimGray"
+                        WidthRequest="330"
+                        VerticalScrollBarVisibility="Always"
+                        Grid.Column="0"
+                        Grid.Row="1">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeItemView>
+
+                            <Grid Margin="10,10,0,0" x:DataType="models:SongFile">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="{Binding Name}"/>
+                        <Label Grid.Column="1" Text="99:99"/>
+                    </Grid>
+                        </SwipeItemView>
+                    
+                        </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
