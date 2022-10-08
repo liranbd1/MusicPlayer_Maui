@@ -6,7 +6,7 @@ namespace MyMusicPlayer.Models
 		public Playlist()
 		{
 		}
-
+		public string Name { get; set; }
 		public List<SongFile> SongsFile { get; set; }
 	}
 }
