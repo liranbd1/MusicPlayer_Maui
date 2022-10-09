@@ -25,6 +25,12 @@ namespace MyMusicPlayer.Models
             Playlists.CollectionChanged += Playlists_CollectionChanged;
 		}
 
+        public void AddSongToPlaylist(SongFile songFile, int playlistIdx)
+        {
+            Playlists[playlistIdx].SongsFile.Add(songFile);
+            UpdatePlaylistJson();
+        }
+
         public void UpdatePlaylists(Playlist playlist)
         {
             Playlists.Add(playlist);

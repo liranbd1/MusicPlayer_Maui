@@ -30,12 +30,20 @@ namespace MyMusicPlayer.ViewModels
             _songsListHandler = songsListHandler;
             _playlistList = playlistList;
             CreateNewPlaylistCommand = new Command(async () => await CreateNewPlaylist());
+            AddSongToPlaylistCommand = new Command(async () => await AddSongToPlaylist());
             OnPropertyChanged(nameof(Playlists));
             OnPropertyChanged(nameof(SongsList));
 
             _songsListHandler.SongsListChanged += OnSongsListChanged;
             _playlistList.NewPlaylistAddedEvent += OnPlaylistAdded;
             _playlistList.PlaylistRemovedEvent += OnPlaylistRemoved;
+        }
+
+        private async Task AddSongToPlaylist()
+        {
+            int playlistIdx = Playlists.IndexOf(SelectedPlaylist);
+            _playlistList.AddSongToPlaylist(SelectedSong, playlistIdx);
+            OnPropertyChanged(nameof(SelectedPlaylist));
         }
 
         #region Public Methods
@@ -78,6 +86,8 @@ namespace MyMusicPlayer.ViewModels
         }
 
         public ICommand CreateNewPlaylistCommand { get; set; }
+
+        public ICommand AddSongToPlaylistCommand { get; set; }
 
         public ObservableCollection<Playlist> Playlists => _playlistList.Playlists;
 
