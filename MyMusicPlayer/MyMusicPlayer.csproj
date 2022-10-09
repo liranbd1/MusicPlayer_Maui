@@ -53,6 +53,8 @@
 	  <None Remove="ViewModels\" />
 	  <None Remove="Models\" />
 	  <None Remove="Newtonsoft.Json" />
+	  <None Remove="Plugin.MauiAudio" />
+	  <None Remove="Plugin.Maui.Audio" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Views\" />
@@ -75,5 +77,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="Plugin.MauiAudio" Version="1.0.4" />
+	  <PackageReference Include="Plugin.Maui.Audio" Version="0.1.0-preview1" />
 	</ItemGroup>
 </Project>

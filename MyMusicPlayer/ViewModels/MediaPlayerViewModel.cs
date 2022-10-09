@@ -2,7 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using MyMusicPlayer.Models;
+using Plugin.Maui.Audio;
 
 namespace MyMusicPlayer.ViewModels
 {
@@ -11,12 +13,13 @@ namespace MyMusicPlayer.ViewModels
 		private PlaylistListJson _playlists;
         private Playlist _selectedPlaylist;
         private ObservableCollection<SongFile> _selectedSongsList;
-
         private ObservableCollection<SongFile> InitialSongsList;
+        private MusicPlayer _player;
 
-		public MediaPlayerViewModel(PlaylistListJson playlistList)
-		{
-			_playlists = playlistList;
+        public MediaPlayerViewModel(PlaylistListJson playlistList, MusicPlayer player)
+        {
+            _player = player;
+            _playlists = playlistList;
             OnPropertyChanged(nameof(Playlists));
             if (Playlists.Count == 0)
             {
@@ -36,7 +39,12 @@ namespace MyMusicPlayer.ViewModels
                 SelectedPlaylistSongs = SelectedPlaylist.SongsFile;
             }
 
+            PlayPlaylistCommand = new Command(() => _player.PlayPlaylist(SelectedPlaylist));
         }
+
+        public ICommand PlayPlaylistCommand { get; set; } 
+
+        public ICommand PlaySongCommand { get; set; }
 
         public ObservableCollection<Playlist> Playlists => _playlists.Playlists;
 

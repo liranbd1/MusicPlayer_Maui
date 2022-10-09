@@ -1,6 +1,7 @@
 ﻿using MyMusicPlayer.Models;
 using MyMusicPlayer.ViewModels;
 using MyMusicPlayer.Views;
+using Plugin.Maui.Audio;
 
 namespace MyMusicPlayer;
 
@@ -18,7 +19,7 @@ public static class MauiProgram
 			});
 
 
-        // Dependecy Injection for the correct IFolderPicker implemintation depending on OS
+		// Dependecy Injection for the correct IFolderPicker implemintation depending on OS
 		// Making sure that the FolderPicker is a singleton object.
 #if Windows
 		builder.Services.AddSingleton<IFolderPicker, Platforms.Windows.FolderPicker>();
@@ -26,6 +27,9 @@ public static class MauiProgram
 #elif __MACCATALYST__
 		builder.Services.AddSingleton<IFolderPicker, Platforms.MacCatalyst.FolderPicker>();
 #endif
+
+		builder.Services.AddSingleton(AudioManager.Current);
+		builder.Services.AddSingleton<MusicPlayer>();
         builder.Services.AddSingleton<FolderListJson>();
         builder.Services.AddSingleton<PlaylistListJson>();
         builder.Services.AddSingleton<SettingsPage>();
