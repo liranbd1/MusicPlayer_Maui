@@ -29,7 +29,7 @@ namespace MyMusicPlayer.ViewModels
             };
             _songsListHandler = songsListHandler;
             _playlistList = playlistList;
-            CreateNewPlaylistCommand = new Command(() => CreateNewPlaylist());
+            CreateNewPlaylistCommand = new Command(async () => await CreateNewPlaylist());
             OnPropertyChanged(nameof(Playlists));
             OnPropertyChanged(nameof(SongsList));
 
@@ -58,8 +58,11 @@ namespace MyMusicPlayer.ViewModels
 
             set
             {
-                _selectedPlaylist = value;
-                OnPropertyChanged();
+                if (_selectedPlaylist != value)
+                {
+                    _selectedPlaylist = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -91,8 +94,6 @@ namespace MyMusicPlayer.ViewModels
         private void OnPlaylistAdded(object sender, Playlist e)
         {
             OnPropertyChanged(nameof(Playlists));
-            SelectedPlaylist = e;
-            OnPropertyChanged(nameof(SelectedPlaylist));
         }
 
         private void OnSongsListChanged(object sender, EventArgs e)
@@ -100,7 +101,7 @@ namespace MyMusicPlayer.ViewModels
             OnPropertyChanged(nameof(SongsList));
         }
 
-        private async void CreateNewPlaylist()
+        private async Task CreateNewPlaylist()
         {
             if (NewPlaylistName == "")
             {
@@ -112,7 +113,8 @@ namespace MyMusicPlayer.ViewModels
                 Name = NewPlaylistName,
                 SongsFile = new List<SongFile>()
             };
-            Playlists.Add(newPlaylist);
+
+            _playlistList.UpdatePlaylists(newPlaylist);
             NewPlaylistName = "";
         }
 

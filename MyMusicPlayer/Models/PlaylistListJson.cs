@@ -25,24 +25,24 @@ namespace MyMusicPlayer.Models
             Playlists.CollectionChanged += Playlists_CollectionChanged;
 		}
 
+        public void UpdatePlaylists(Playlist playlist)
+        {
+            Playlists.Add(playlist);
+        }
+
         private void Playlists_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            try
+            var p = (Playlist)e.NewItems[0];
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                var p = (Playlist)e.NewItems[0];
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                {
-                    OnNewPlaylistAdded(p);
-                }
-                else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                {
-                    OnPlaylistRemoved(p);
-                }
+                OnNewPlaylistAdded(p);
             }
-            catch (Exception ex)
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                Console.WriteLine(ex.Message);
+                OnPlaylistRemoved(p);
             }
+
+            UpdatePlaylistJson();
         }
 
         public ObservableCollection<Playlist> Playlists => _inner.PlaylistList;
@@ -80,6 +80,10 @@ namespace MyMusicPlayer.Models
             return reader.ReadToEnd();
         }
 
+        private void UpdatePlaylistJson()
+        {
+            File.WriteAllText(_appDirectroyPath, JsonConvert.SerializeObject(_inner));
+        }
 	}
 }
 
