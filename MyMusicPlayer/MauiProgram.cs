@@ -27,6 +27,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IFolderPicker, Platforms.MacCatalyst.FolderPicker>();
 #endif
         builder.Services.AddSingleton<FolderListJson>();
+        builder.Services.AddSingleton<PlaylistListJson>();
         builder.Services.AddSingleton<SettingsPage>();
 		builder.Services.AddSingleton<SettingsViewModel>();
 		builder.Services.AddSingleton<SongsListHandler>();

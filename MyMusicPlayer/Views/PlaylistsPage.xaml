@@ -50,5 +50,33 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Grid Grid.Column="1" Grid.RowSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Margin="35">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <HorizontalStackLayout>
+                <Entry Placeholder="New Playlist Name" Grid.Column="0" WidthRequest="150" Margin="5" Text="{Binding NewPlaylistName, Mode=TwoWay}" />
+                <Button Text="Create New Playlist" Margin="5" Command="{Binding CreateNewPlaylistCommand}" Grid.Column="1" WidthRequest="175"/>
+            </HorizontalStackLayout>
+
+            <Picker BackgroundColor="LightSlateGray" WidthRequest="325" Grid.Row="1"
+                Margin="5"
+                SelectedItem="{Binding SelectedPlaylist}"
+                ItemsSource="{Binding Playlists}"
+                ItemDisplayBinding="{Binding Name}"
+                TextColor="AntiqueWhite"/>
+
+            <!--Buttons to add song to playlist or create a new playlist-->
+            <Button Text="Add Song to playlist" Grid.Row="2" Margin="5" WidthRequest="325"/>
+            
+            <!--Picker to select the playlist to add to-->
+
+        </Grid>
     </Grid>
 </ContentPage>

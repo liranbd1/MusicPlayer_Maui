@@ -22,7 +22,28 @@ namespace MyMusicPlayer.Models
         public PlaylistListJson()
 		{
 			InitializePlaylists();
+            Playlists.CollectionChanged += Playlists_CollectionChanged;
 		}
+
+        private void Playlists_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            try
+            {
+                var p = (Playlist)e.NewItems[0];
+                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                {
+                    OnNewPlaylistAdded(p);
+                }
+                else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+                {
+                    OnPlaylistRemoved(p);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         public ObservableCollection<Playlist> Playlists => _inner.PlaylistList;
 
