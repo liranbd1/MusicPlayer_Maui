@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+
 namespace MyMusicPlayer.Models
 {
 	public class Playlist
@@ -7,7 +9,7 @@ namespace MyMusicPlayer.Models
 		{
 		}
         public string Name { get; set; }
-        public List<SongFile> SongsFile { get; set; }
+        public ObservableCollection<SongFile> SongsFile { get; set; }
 	}
 }
 

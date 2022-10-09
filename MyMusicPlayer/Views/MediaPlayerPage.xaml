@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MyMusicPlayer.Views.MediaPlayerPage"
              xmlns:viewModels="clr-namespace:MyMusicPlayer.ViewModels"
+             xmlns:models="clr-namespace:MyMusicPlayer.Models"
              x:DataType="viewModels:MediaPlayerViewModel"
              Title="MediaPlayerPage">
     <Grid>
@@ -19,25 +20,32 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
-            <!--The playing playlist and list of songs should be a table-->
-            <TableView Margin="20,10,0,15"
-                Grid.Row="0"
-                WidthRequest="700"
-                HeightRequest="400"
-                VerticalOptions="EndAndExpand"
-                Intent="Menu">
-
-                <TableRoot>
-                    <TableSection Title="Name">
-                        <TextCell
-                            Text="Some Text"
-                            />
-
-                    </TableSection>
-
-                </TableRoot>
-            </TableView>
-
+           
+            <ListView 
+                      Grid.Row="0"
+                      Margin="20,10,0,15"
+                      WidthRequest="570"
+                      HeightRequest="400"
+                      VerticalOptions="EndAndExpand"
+                ItemsSource="{Binding SelectedPlaylistSongs}"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid x:DataType="models:SongFile" HeightRequest="20" Margin="5,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="350"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Name}" Grid.Column="0"/>
+                                <Label Text="{Binding LengthSec}" Grid.Column="1"/>
+                                <Button Text="Play" Grid.Column="2"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
             <!--Play buttons and Progress bar...-->
             <VerticalStackLayout Grid.Row="1" Margin="20,10,0,15">
@@ -67,6 +75,19 @@
         </Grid>
 
         <!--Playlist selection-->
-       
+        <Grid Grid.Column="1" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Picker BackgroundColor="LightSlateGray" WidthRequest="325" Grid.Row="0"
+                Margin="5"
+                SelectedItem="{Binding SelectedPlaylist}"
+                ItemsSource="{Binding Playlists}"
+                ItemDisplayBinding="{Binding Name}"
+                TextColor="AntiqueWhite"
+            />
+        </Grid>
     </Grid>
 </ContentPage>

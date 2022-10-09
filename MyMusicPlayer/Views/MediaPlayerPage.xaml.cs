@@ -5,10 +5,10 @@ namespace MyMusicPlayer.Views;
 
 public partial class MediaPlayerPage : ContentPage
 {
-	public MediaPlayerPage(SongsListHandler songsListHandler)
+	public MediaPlayerPage(PlaylistListJson playlistLists)
 	{
 		//App.Current.MainPage = new AppShell();
 		InitializeComponent();
-		this.BindingContext = new MediaPlayerViewModel(songsListHandler);
+		this.BindingContext = new MediaPlayerViewModel(playlistLists);
 	}
 }

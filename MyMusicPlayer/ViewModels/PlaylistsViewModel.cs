@@ -14,19 +14,11 @@ namespace MyMusicPlayer.ViewModels
         private SongsListHandler _songsListHandler;
         private PlaylistListJson _playlistList;
         private Playlist _selectedPlaylist;
-        private ObservableCollection<Playlist> _testOne;
         private string _newPlaylistName = "";
 
         public PlaylistsViewModel(SongsListHandler songsListHandler, PlaylistListJson playlistList)
         {
-            _testOne = new ObservableCollection<Playlist>()
-            {
-                new Playlist()
-                {
-                    Name = "My Test Playlist",
-                    SongsFile = new List<SongFile>()
-                }
-            };
+            
             _songsListHandler = songsListHandler;
             _playlistList = playlistList;
             CreateNewPlaylistCommand = new Command(async () => await CreateNewPlaylist());
@@ -121,7 +113,7 @@ namespace MyMusicPlayer.ViewModels
             var newPlaylist = new Playlist()
             {
                 Name = NewPlaylistName,
-                SongsFile = new List<SongFile>()
+                SongsFile = new ObservableCollection<SongFile>()
             };
 
             _playlistList.UpdatePlaylists(newPlaylist);
