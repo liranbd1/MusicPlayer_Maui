@@ -67,7 +67,7 @@
                         Margin="5"
                         Text="Play playlist"
                         WidthRequest="120"
-                        Command="{Binding PlaySongCommand}"
+                        Command="{Binding PlayPlaylistCommand}"
                         />
                     <Button
                         Margin="5"
