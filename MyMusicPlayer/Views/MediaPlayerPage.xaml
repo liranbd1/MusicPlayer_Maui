@@ -5,7 +5,8 @@
              xmlns:viewModels="clr-namespace:MyMusicPlayer.ViewModels"
              xmlns:models="clr-namespace:MyMusicPlayer.Models"
              x:DataType="viewModels:MediaPlayerViewModel"
-             Title="MediaPlayerPage">
+             Title="MediaPlayerPage"
+             x:Name="parentContentPage">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -28,19 +29,25 @@
                       HeightRequest="400"
                       VerticalOptions="EndAndExpand"
                 ItemsSource="{Binding SelectedPlaylistSongs}"
+                SelectedItem="{Binding SelectedSongToPlay}"
                 >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid x:DataType="models:SongFile" HeightRequest="20" Margin="5,0,0,0">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="350"/>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="100"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Name}" Grid.Column="0"/>
-                                <Label Text="{Binding LengthSec}" Grid.Column="1"/>
-                                <Button Text="Play" Grid.Column="2"/>
+                                        <ColumnDefinition Width="450"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                <Grid x:DataType="models:SongFile" HeightRequest="20" Margin="5,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="350"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Name}" Grid.Column="0"/>
+                                    <Label Text="{Binding LengthSec}" Grid.Column="1"/>
+                                </Grid>
+                                <Button Text="Play" Grid.Column="1" Command="{Binding Source={x:Reference parentContentPage}, Path=BindingContext.PlaySongCommand}" HeightRequest="30"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
@@ -54,12 +61,13 @@
                         Margin="5"
                         Text="Previous"
                         WidthRequest="95"
+                        Command="{Binding PauseCommand}"
                         />
                     <Button
                         Margin="5"
-                        Text="Play"
-                        WidthRequest="95"
-                        Command="{Binding PlayPlaylistCommand}"
+                        Text="Play playlist"
+                        WidthRequest="120"
+                        Command="{Binding PlaySongCommand}"
                         />
                     <Button
                         Margin="5"

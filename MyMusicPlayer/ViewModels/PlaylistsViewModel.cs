@@ -8,7 +8,7 @@ using MyMusicPlayer.Views;
 
 namespace MyMusicPlayer.ViewModels
 {
-    public class PlaylistsViewModel : INotifyPropertyChanged
+    public class PlaylistsViewModel : BaseViewModel
     {
         private SongFile _selectedSong;
         private SongsListHandler _songsListHandler;
@@ -85,7 +85,6 @@ namespace MyMusicPlayer.ViewModels
 
         public ObservableCollection<SongFile> SongsList => _songsListHandler.AllSongs;
 
-        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         private void OnPlaylistRemoved(object sender, Playlist e)
@@ -119,8 +118,5 @@ namespace MyMusicPlayer.ViewModels
             _playlistList.UpdatePlaylists(newPlaylist);
             NewPlaylistName = "";
         }
-
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

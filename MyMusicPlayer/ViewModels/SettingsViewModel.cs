@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MyMusicPlayer.ViewModels
 {
-    public class SettingsViewModel:INotifyPropertyChanged
+    public class SettingsViewModel:BaseViewModel
     {
         private string _songFolderPath;
         private string _songFolerDescription;
@@ -147,12 +147,6 @@ namespace MyMusicPlayer.ViewModels
             var pickedFolder = await _folderPicker.PickFolder();
             SongFolderPath = pickedFolder;
         }
-
-        
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
 

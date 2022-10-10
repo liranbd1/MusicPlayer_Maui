@@ -8,13 +8,15 @@ using Plugin.Maui.Audio;
 
 namespace MyMusicPlayer.ViewModels
 {
-	public class MediaPlayerViewModel : INotifyPropertyChanged
+	public class MediaPlayerViewModel : BaseViewModel
 	{
 		private PlaylistListJson _playlists;
         private Playlist _selectedPlaylist;
         private ObservableCollection<SongFile> _selectedSongsList;
-        private ObservableCollection<SongFile> InitialSongsList;
+        private ObservableCollection<SongFile> _initialSongsList;
+        private ObservableCollection<Playlist> _initialPlaylist;
         private MusicPlayer _player;
+        private SongFile _selectedSong;
 
         public MediaPlayerViewModel(PlaylistListJson playlistList, MusicPlayer player)
         {
@@ -23,28 +25,50 @@ namespace MyMusicPlayer.ViewModels
             OnPropertyChanged(nameof(Playlists));
             if (Playlists.Count == 0)
             {
-                InitialSongsList = new ObservableCollection<SongFile>()
+                _initialSongsList = new ObservableCollection<SongFile>()
                 {
                     new SongFile()
                     {
-                        Name = "Create a playlist and add songs",
+                        Name = "Please add songs",
                         LengthSec = 99
                     }
                 };
 
+                _initialPlaylist = new ObservableCollection<Playlist>()
+                {
+                    new Playlist()
+                    {
+                        Name = "Initial Playlist, please create one of your own",
+                        SongsFile = _initialSongsList
+                    }
+                };
+
+                SelectedPlaylist = _initialPlaylist[0];
             }
             else
             {
                 SelectedPlaylist = Playlists[0];
-                SelectedPlaylistSongs = SelectedPlaylist.SongsFile;
             }
 
+            SelectedPlaylistSongs = SelectedPlaylist.SongsFile;
             PlayPlaylistCommand = new Command(() => _player.PlayPlaylist(SelectedPlaylist));
+            PauseCommand = new Command(() => _player.PauseSong());
+            PlaySongCommand = new Command(() => Bob());
+            OnPropertyChanged(nameof(Playlists));
+            OnPropertyChanged(nameof(SelectedPlaylist));
         }
+
+        private void Bob()
+        {
+            _player.PlaySong(SelectedSongToPlay);
+        }
+
 
         public ICommand PlayPlaylistCommand { get; set; } 
 
         public ICommand PlaySongCommand { get; set; }
+
+        public ICommand PauseCommand { get; set; }
 
         public ObservableCollection<Playlist> Playlists => _playlists.Playlists;
 
@@ -68,7 +92,7 @@ namespace MyMusicPlayer.ViewModels
 
             set
             {
-                if (_selectedPlaylist != value)
+                if (_selectedPlaylist != value && value != null)
                 {
                     _selectedPlaylist = value;
                     OnPropertyChanged();
@@ -76,10 +100,16 @@ namespace MyMusicPlayer.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public SongFile SelectedSongToPlay
+        {
+            get => _selectedSong;
 
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            set
+            {
+                _selectedSong = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }
 

@@ -7,11 +7,17 @@ namespace MyMusicPlayer.Models
     {
         private readonly IAudioManager _audioManager;
         private IAudioPlayer _currentPlayer;
+        private int _currentSongIndex;
+        private double _currentSongPosition;
+        private SongFile _currentSong;
 
         public MusicPlayer(IAudioManager audioManager)
         {
             _audioManager = audioManager;
+            _currentSongIndex = 0;
         }
+
+        public double Duration => _currentPlayer.Duration;
 
         public void PlayPlaylist(Playlist playlist)
         {
@@ -21,7 +27,7 @@ namespace MyMusicPlayer.Models
 
                 while (_currentPlayer.IsPlaying)
                 {
-                    if (_currentPlayer.CurrentPosition < _currentPlayer.Duration)
+                    if (_currentPlayer.CurrentPosition >= _currentPlayer.Duration)
                     {
                         break;
                     }
@@ -29,16 +35,32 @@ namespace MyMusicPlayer.Models
             }
         }
 
-        public void PlaySong(SongFile song)
+        /// <summary>
+        /// Play or resume the music player
+        /// </summary>
+        /// <param name="song"></param>
+        public async void PlaySong(SongFile song)
         {
-            if (_currentPlayer != null && _currentPlayer.IsPlaying)
+            if (_currentPlayer != null)
             {
-                _currentPlayer.Stop();
-                _currentPlayer.Dispose();
+                if (song.Equals(_currentSong))
+                {
+                    _currentPlayer.Play();
+                    _currentPlayer.Seek(_currentSongPosition);
+                }
+                else
+                {
+                    _currentPlayer.Stop();
+                    _currentPlayer.Dispose();
+                }
             }
 
-            _currentPlayer = _audioManager.CreatePlayer(song.Path);
-            _currentPlayer.Play();
+            else
+            {
+                _currentSong = song;
+                _currentPlayer = _audioManager.CreatePlayer(_currentSong.Path);
+                _currentPlayer.Play();
+            }
         }
 
         public void PauseSong()
@@ -48,6 +70,7 @@ namespace MyMusicPlayer.Models
                 return;
             }
 
+            _currentSongPosition = _currentPlayer.CurrentPosition;
             _currentPlayer.Pause();
         }
     }

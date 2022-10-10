@@ -5,12 +5,11 @@ using System.Windows.Input;
 
 namespace MyMusicPlayer.ViewModels
 {
-	public class MainPageViewModel : INotifyPropertyChanged
+	public class MainPageViewModel : BaseViewModel
 	{
 		private int _clickCounter;
 		private string _buttonText;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 		public ICommand CounterButtonClicked { get; private set; }
 
         public MainPageViewModel()
@@ -58,9 +57,6 @@ namespace MyMusicPlayer.ViewModels
 				return $"Clicked {clicks} times";
 			}
 		}
-
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
 
